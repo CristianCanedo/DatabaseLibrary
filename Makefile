@@ -35,7 +35,6 @@ TESTSRCS := $(wildcard $(testdir)//*.cpp)
 TESTOBJS := $(patsubst $(testdir)//%.cpp, $(tbuilddir)//%.o, $(TESTSRCS))
 TESTEXE := $(testdir)//runtests
 
-
 tests: $(TESTOBJS)
 	$(CC) $^ -L $(bindir)//static -l cf -o $(TESTEXE)
 
@@ -44,5 +43,16 @@ $(tbuilddir)//%.o: $(testdir)//%.cpp
 
 .PHONY: clean
 clean:
-	@echo Cleaning object files
+	@echo Cleaning object files...
 	rm -rf $(objdir)//*.o
+	@echo \nDone.
+
+updateLibrary:
+	@echo Moving libdatabase.a to c++ search path...
+	cp -f lib/libdatabase.a /usr/lib/gcc/x86_64-pc-cygwin/7.3.0/
+	@echo \nDone.
+
+updateHeaders:
+	@echo Moving header files to c++ search path...
+	cp -f include/*.h /usr/lib/gcc/x86_64-pc-cygwin/7.3.0/include/c++/database/
+	@echo \nDone.
