@@ -25,6 +25,7 @@ private:
     int executeSQL(std::string sql, char** errmsg);
     int generateUniqueId();
     static int selectCallback(void*, int argc, char** argv, char** colName);
+	static int updateCallback(void*, int argc, char** argv, char** colName);
 
 public:
     // CREATORS
