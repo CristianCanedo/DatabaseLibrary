@@ -49,10 +49,10 @@ clean:
 
 updateLibrary:
 	@echo Moving libdatabase.a to c++ search path...
-	cp -f lib/libdatabase.a /usr/lib/gcc/x86_64-pc-cygwin/7.3.0/
+	cp -f lib/libdatabase.a /usr/lib/
 	@echo \nDone.
 
 updateHeaders:
 	@echo Moving header files to c++ search path...
-	cp -f include/*.h /usr/lib/gcc/x86_64-pc-cygwin/7.3.0/include/c++/database/
+	cp -f include/*.h /usr/include/
 	@echo \nDone.
