@@ -1,7 +1,7 @@
 #include <string>
 #include <cstdlib>
 #include <time.h>
-#include <iostream>
+#include <stdexcept>
 #include <vector>
 #include "../include/sqlite3.h"
 #include "../include/database.h"
@@ -16,15 +16,15 @@ Database::Database()
     d_result_p = nullptr;
 
     if (!s_seeded) {
-	srand(time(NULL));
-	s_seeded = true;
+		srand(time(NULL));
+		s_seeded = true;
     }
 }
 
 Database::Database(std::string dbPath)
 {
     if (s_dbPath.empty()) {
-	s_dbPath = dbPath;
+		s_dbPath = dbPath;
     }
     Database();
 }
@@ -37,9 +37,8 @@ Database::~Database()
 Database& Database::connect()
 {
     if (sqlite3_open(s_dbPath.c_str(), &d_database_p) != SQLITE_OK) {
-	sqlite3_close(d_database_p);
-	std::cerr << "Database::connect() failed: ";
-	std::cerr << sqlite3_errmsg(d_database_p) << std::endl;
+		sqlite3_close(d_database_p);
+		throw std::runtime_error(sqlite3_errmsg(d_database_p));
     }
     return *this;
 }
@@ -51,9 +50,7 @@ Database& Database::select(std::string sql)
     int rc = executeSQL(sql, &errmsg);
 
     if (rc != SQLITE_OK) {
-	d_lastErrorMsg = std::string(errmsg);
-	d_result_p = DataResult::fail(d_lastErrorMsg);
-	sqlite3_free(errmsg);
+		throw std::runtime_error(errmsg);
     }
 
     delete errmsg;
@@ -67,9 +64,7 @@ Database& Database::insert(std::string sql)
     int rc = executeSQL(sql, &errmsg);
     
     if (rc != SQLITE_OK) {
-	d_lastErrorMsg = std::string(errmsg);
-	d_result_p = DataResult::fail(d_lastErrorMsg);
-	sqlite3_free(errmsg);
+		throw std::runtime_error(errmsg);
     }
 
     delete errmsg;
@@ -84,7 +79,7 @@ Database& Database::update(std::string sql)
 void Database::close()
 {
     if (sqlite3_close(d_database_p) != SQLITE_OK) {
-	std::cerr << "Unable to close database." << std::endl;	
+		throw std::runtime_error(sqlite3_errmsg(d_database_p));
     }
 }
 
@@ -112,9 +107,9 @@ int Database::selectCallback(void* dataSet, int argc, char** argv, char** colNam
     std::string name, value;
 
     for(int i = 0; i < argc; ++i) {
-	name = std::string(colName[i]);
-	value = std::string(argv[i]);
-	row.addColumn(name, value);
+		name = std::string(colName[i]);
+		value = std::string(argv[i]);
+		row.addColumn(name, value);
     }
 
     dset->addRow(row);
