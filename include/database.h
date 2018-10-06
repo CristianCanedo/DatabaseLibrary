@@ -4,12 +4,13 @@
 
 #include <string>
 #include <vector>
+#include <functional>
 #include "sqlite3.h"
 #include "dataresult.h"
 
 class Database {
 
-typedef int (*callback_t)(void*, int, char**, char**);
+typedef std::function<int(void*, int, char**, char**)> callback_t;
 
 private:
     sqlite3* d_database_p;
@@ -25,7 +26,7 @@ private:
     int executeSQL(std::string sql, char** errmsg);
     int generateUniqueId();
     static int selectCallback(void*, int argc, char** argv, char** colName);
-	static int updateCallback(void*, int argc, char** argv, char** colName);
+	//static int updateCallback(void*, int argc, char** argv, char** colName);
 
 public:
     // CREATORS

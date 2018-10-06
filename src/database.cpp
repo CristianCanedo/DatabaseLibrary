@@ -31,7 +31,8 @@ Database::Database(std::string dbPath)
 
 Database::~Database()
 {
-    delete d_result_p;
+    d_result_p->release();
+	delete d_result_p;
 }
 
 Database& Database::connect()

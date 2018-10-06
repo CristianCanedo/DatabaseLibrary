@@ -2,7 +2,8 @@
 #include "../include/dataresult.h"
 #include "../include/dataset.h"
 
-DataResult* DataResult::instance_p = nullptr;
+DataResult* DataResult::s_instance_p = nullptr;
+int DataResult::d_count = 0;
 
 DataResult::DataResult(const DataSet& dataSet)
     : d_dataSet(dataSet)
@@ -16,20 +17,36 @@ DataResult::DataResult(std::string errmsg)
     success = false;
 }
 
+DataResult::~DataResult() {}
+
 DataResult* DataResult::ok(const DataSet& dataSet)
 {
-    if (instance_p == nullptr) {
-	instance_p = new DataResult(dataSet);
+    if (s_instance_p == nullptr) {
+	s_instance_p = new DataResult(dataSet);
     }
-    return instance_p;
+
+	addRefToCount();
+    return s_instance_p;
 }
 
 DataResult* DataResult::fail(std::string errmsg)
 {
-    if (instance_p == nullptr) {
-	instance_p = new DataResult(errmsg);
+    if (s_instance_p == nullptr) {
+	s_instance_p = new DataResult(errmsg);
     }
-    return instance_p;
+
+	removeRefFromCount();
+    return s_instance_p;
+}
+
+void DataResult::release()
+{
+	removeRefFromCount();
+
+	if (d_count == 0 && s_instance_p != nullptr) {
+		delete s_instance_p;
+		s_instance_p = nullptr;
+	}
 }
 
 Row& DataResult::operator[](int index)
@@ -45,4 +62,14 @@ bool DataResult::good() const
 bool DataResult::bad() const
 {
     return success;
+}
+
+void DataResult::addRefToCount()
+{
+	++d_count;
+}
+
+void DataResult::removeRefFromCount()
+{
+	--d_count;
 }

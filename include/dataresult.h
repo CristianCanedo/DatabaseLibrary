@@ -7,7 +7,8 @@
 
 struct DataResult {
 private:
-    static DataResult* instance_p;
+    static DataResult* s_instance_p;
+	static int d_count;
     DataSet d_dataSet;
     std::string d_errmsg;
 
@@ -16,11 +17,16 @@ private:
     // IMPLEMENTED, BUT PRIVATE
     DataResult(const DataSet& dataSet);
     DataResult(std::string errmsg);
+	~DataResult();
+
+	void addRefToCount();
+	void removeRefFromCount();
 
 public:
     // CREATORS
     static DataResult* ok(const DataSet& dataSet);
     static DataResult* fail(std::string errmsg);
+	static void release();
 
     // ACCESSORS
     Row& operator[](int index);
