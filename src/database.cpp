@@ -37,7 +37,7 @@ Database::~Database()
 
 Database& Database::connect()
 {
-    if (dbPath.empty()) {
+    if (s_dbPath.empty()) {
         throw std::runtime_error("Database::connect(): No connection string has been set.");
     }
 
@@ -83,7 +83,7 @@ Database& Database::update(std::string sql)
     return *this;
 }
 
-Database& Database::setcallback(callback_t callback)
+void Database::setcallback(callback_t callback)
 {
     d_callback = callback;
 }
