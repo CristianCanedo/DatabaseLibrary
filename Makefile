@@ -36,7 +36,7 @@ TESTOBJS := $(patsubst $(testdir)//%.cpp, $(tbuilddir)//%.o, $(TESTSRCS))
 TESTEXE := $(testdir)//runtests
 
 tests: $(TESTOBJS)
-	$(CC) $^ -L $(bindir)//static -l cf -o $(TESTEXE)
+	$(CC) $^ -l database -o $(TESTEXE)
 
 $(tbuilddir)//%.o: $(testdir)//%.cpp
 	$(CC) -I ..//$(incdir) $(CPPFLAGS) -o $@ $<
