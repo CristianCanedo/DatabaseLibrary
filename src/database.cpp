@@ -54,13 +54,14 @@ Database& Database::select(std::string sql)
 		throw std::runtime_error(errmsg);
     }
 
+	callback = nullptr;
     delete errmsg;
     return *this;
 }
 
 Database& Database::insert(std::string sql)
 {
-    callback = NULL;
+    callback = nullptr;
     char* errmsg;
     int rc = executeSQL(sql, &errmsg);
     
@@ -74,6 +75,7 @@ Database& Database::insert(std::string sql)
 
 Database& Database::update(std::string sql)
 {
+	callback = nullptr;
     return *this;
 }
 
