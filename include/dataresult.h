@@ -3,12 +3,11 @@
 #define INCLUDED_DATARESULT
 
 #include <string>
+#include <memory>
 #include "dataset.h"
 
 struct DataResult {
 private:
-    static DataResult* s_instance_p;
-	static int d_count;
     DataSet d_dataSet;
     std::string d_errmsg;
 
@@ -17,16 +16,11 @@ private:
     // IMPLEMENTED, BUT PRIVATE
     DataResult(const DataSet& dataSet);
     DataResult(std::string errmsg);
-	~DataResult();
-
-	void addRefToCount();
-	void removeRefFromCount();
 
 public:
     // CREATORS
-    static DataResult* ok(const DataSet& dataSet);
-    static DataResult* fail(std::string errmsg);
-	static void release();
+    static std::unique_ptr<DataResult> ok(const DataSet& dataSet);
+    static std::unique_ptr<DataResult> fail(std::string errmsg);
 
     // ACCESSORS
     Row& operator[](int index);

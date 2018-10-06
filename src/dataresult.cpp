@@ -1,9 +1,7 @@
 #include <string>
-#include "../include/dataresult.h"
-#include "../include/dataset.h"
-
-DataResult* DataResult::s_instance_p = nullptr;
-int DataResult::d_count = 0;
+#include <memory>
+#include "dataresult.h"
+#include "dataset.h"
 
 DataResult::DataResult(const DataSet& dataSet)
     : d_dataSet(dataSet)
@@ -17,36 +15,14 @@ DataResult::DataResult(std::string errmsg)
     success = false;
 }
 
-DataResult::~DataResult() {}
-
-DataResult* DataResult::ok(const DataSet& dataSet)
+std::unique_ptr<DataResult> DataResult::ok(const DataSet& dataSet)
 {
-    if (s_instance_p == nullptr) {
-	s_instance_p = new DataResult(dataSet);
-    }
-
-	addRefToCount();
-    return s_instance_p;
+	return std::unique_ptr<DataResult>(new DataResult(dataSet));
 }
 
-DataResult* DataResult::fail(std::string errmsg)
+std::unique_ptr<DataResult> DataResult::fail(std::string errmsg)
 {
-    if (s_instance_p == nullptr) {
-	s_instance_p = new DataResult(errmsg);
-    }
-
-	removeRefFromCount();
-    return s_instance_p;
-}
-
-void DataResult::release()
-{
-	removeRefFromCount();
-
-	if (d_count == 0 && s_instance_p != nullptr) {
-		delete s_instance_p;
-		s_instance_p = nullptr;
-	}
+	return std::unique_ptr<DataResult>(new DataResult(errmsg));
 }
 
 Row& DataResult::operator[](int index)
@@ -61,15 +37,5 @@ bool DataResult::good() const
 
 bool DataResult::bad() const
 {
-    return success;
-}
-
-void DataResult::addRefToCount()
-{
-	++d_count;
-}
-
-void DataResult::removeRefFromCount()
-{
-	--d_count;
+    return !good();
 }
