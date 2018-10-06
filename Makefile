@@ -4,6 +4,7 @@ LIBC := ar rsv
 INCLUDE := -I include
 CPPFLAGS := -c -Wall
 
+# Directories
 srcdir := src
 objdir := build
 bindir := bin
@@ -11,20 +12,24 @@ incdir := include
 testdir := tests
 libdir := lib
 
+# Build files
 LIB := $(libdir)//libdatabase.a
 SRCS := $(wildcard $(srcdir)//*.cpp)
 OBJS := $(patsubst $(srcdir)//%.cpp, $(objdir)//%.o, $(SRCS))
 
+
+# TARGETS
 all: clean tclean sqlite lib updateLibrary updateHeaders
 
 sqlite: $(srcdir)//sqlite3.c
+	@echo "Compiling sqlite3 object file\n"
 	gcc -g $(INCLUDE) $(CPPFLAGS) -o $(objdir)//sqlite3.o $< -static
 
 lib: $(LIB)
 
 $(LIB): $(OBJS) $(objdir)//sqlite3.o
+	@echo "Compiling and linking library\n"
 	$(LIBC) $@ $^
-	@echo Compilation success
 
 $(objdir)//%.o: $(srcdir)//%.cpp
 	$(CC) -g $(INCLUDE) $(CPPFLAGS) -o $@ $<
@@ -38,6 +43,7 @@ TESTOBJS := $(patsubst $(testdir)//%.cpp, $(tobjdir)//%.o, $(TESTSRCS))
 TESTEXE := $(testdir)//alltests
 
 tests: $(TESTOBJS)
+	@echo "Compiling and linking tests\n"
 	$(CC) $^ -l database -o $(TESTEXE)
 
 $(tobjdir)//%.o: $(testdir)//%.cpp
@@ -45,19 +51,17 @@ $(tobjdir)//%.o: $(testdir)//%.cpp
 
 .PHONY: clean
 clean:
-	@echo Cleaning object files...
+	@echo "Cleaning library object files\n"
 	rm -rf $(objdir)//*.o
 
 tclean:
-	@echo Cleaning test object files...
+	@echo "Cleaning test object files\n"
 	rm -rf $(tobjdir)//*.o
 
 updateLibrary:
-	@echo Moving libdatabase.a to c++ search path...
+	@echo "Moving libdatabase.a to C++ lib path\n"
 	cp -f lib/libdatabase.a /usr/lib/
-	@echo \nDone.
 
 updateHeaders:
-	@echo Moving header files to c++ search path...
+	@echo "Moving header files to C++ include path\n"
 	cp -f include/*.h /usr/include/
-	@echo \nDone.
