@@ -24,9 +24,7 @@ Database::Database()
 
 Database::Database(std::string dbPath)
 {
-    if (s_dbPath.empty()) {
-        s_dbPath = dbPath;
-    }
+    s_dbPath = dbPath;
     Database();
 }
 
@@ -39,6 +37,10 @@ Database::~Database()
 
 Database& Database::connect()
 {
+    if (dbPath.empty()) {
+        throw std::runtime_error("Database::connect(): No connection string has been set.");
+    }
+
     if (sqlite3_open(s_dbPath.c_str(), &d_database_p) != SQLITE_OK) {
         std::string errmsg(sqlite3_errmsg(d_database_p));
         throw std::runtime_error("Database::connect(): " + errmsg);
@@ -49,6 +51,10 @@ Database& Database::connect()
 
 Database& Database::connect(std::string connectionString)
 {
+    if (connectionString.empty()) {
+        std::invalid_argument("connectionString: Cannot be empty.");
+    }
+
     s_dbPath = connectionString;
     connect();
     return *this;
@@ -56,11 +62,12 @@ Database& Database::connect(std::string connectionString)
 
 Database& Database::select(std::string sql)
 {
-    d_callback = selectCallback;
+    if (d_callback == NULL) {
+        d_callback  = selectCallback;
+    }
+
     executeSQL(sql);
-
     d_result_p = DataResult::ok(d_dataSet);
-
     return *this;
 }
 
@@ -101,6 +108,10 @@ DataResult Database::getResult() const
 
 int Database::executeSQL(std::string sql)
 {
+    if (sql.empty()) {
+        throw std::invalid_argument("sql: Cannot be empty.");
+    }
+
     char* errmsg;
     int ret;
     
