@@ -12,15 +12,17 @@ make clean
 usrlib=/usr/lib/
 usrinc=/usr/include/
 
-echo "\nCopying lib/libdatabase.a to C++ lib path"
+echo ""
+echo "Copying library to C++ lib path"
 cp -f lib/libdatabase.a $usrlib
 
-if [! -f lib/libdatabase.a]; then
+if [ ! -f lib/libdatabase.a ]; then
     echo "\nInstallation failed.\n"
     exit 1
 fi
 
-echo "\nCopying header files to C++ include path"
+echo "Copying header files to C++ include path"
 cp -f include/*.h $usrinc
+echo ""
 
-echo "\nInstallation success."
+echo "Installation success."

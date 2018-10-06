@@ -58,11 +58,11 @@ $(tobjdir)//%.o: $(testdir)//%.cpp
 
 .PHONY: clean
 clean:
+	@echo ""
 	@echo "Cleaning library object files"
 	rm -rf $(objdir)//*.o
-	@echo ""
 
 tclean:
+	@echo ""
 	@echo "Cleaning test object files"
 	rm -rf $(tobjdir)//*.o
-	@echo ""
