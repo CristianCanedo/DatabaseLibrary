@@ -17,12 +17,12 @@ DataResult::DataResult(std::string errmsg)
 
 std::unique_ptr<DataResult> DataResult::ok(const DataSet& dataSet)
 {
-	return std::unique_ptr<DataResult>(new DataResult(dataSet));
+    return std::unique_ptr<DataResult>(new DataResult(dataSet));
 }
 
 std::unique_ptr<DataResult> DataResult::fail(std::string errmsg)
 {
-	return std::unique_ptr<DataResult>(new DataResult(errmsg));
+    return std::unique_ptr<DataResult>(new DataResult(errmsg));
 }
 
 Row& DataResult::operator[](int index)

@@ -79,7 +79,7 @@ void Database::close()
 
 std::string Database::getLastError() const
 {
-	return d_lastError;
+    return d_lastError;
 }
 
 DataResult Database::getResult() const
