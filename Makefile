@@ -15,6 +15,8 @@ LIB := $(libdir)//libdatabase.a
 SRCS := $(wildcard $(srcdir)//*.cpp)
 OBJS := $(patsubst $(srcdir)//%.cpp, $(objdir)//%.o, $(SRCS))
 
+all: clean tclean sqlite lib updateLibrary updateHeaders
+
 sqlite: $(srcdir)//sqlite3.c
 	gcc -g $(INCLUDE) $(CPPFLAGS) -o $(objdir)//sqlite3.o $< -static
 
