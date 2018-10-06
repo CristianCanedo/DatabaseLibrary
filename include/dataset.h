@@ -49,6 +49,7 @@ public:
     DataSet& operator+=(const Row& rhs);
 
     // ACCESSORS
+    int size() const;
     Row& operator[](int index);
 };
 #endif

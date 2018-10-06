@@ -50,6 +50,11 @@ DataSet& DataSet::operator+=(const Row& rhs)
     return *this;
 }
 
+int DataSet::size() const
+{
+    return d_rows.size();
+}
+
 Row& DataSet::operator[](int index)
 {
     return d_rows[index];

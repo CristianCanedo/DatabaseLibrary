@@ -47,6 +47,13 @@ Database& Database::connect()
     return *this;
 }
 
+Database& Database::connect(std::string connectionString)
+{
+    s_dbPath = connectionString;
+    connect();
+    return *this;
+}
+
 Database& Database::select(std::string sql)
 {
     callback = selectCallback;

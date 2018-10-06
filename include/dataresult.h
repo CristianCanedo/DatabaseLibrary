@@ -23,6 +23,8 @@ public:
     static std::unique_ptr<DataResult> fail(std::string errmsg);
 
     // ACCESSORS
+    std::string getError() const;
+    int size() const;
     Row& operator[](int index);
 
     bool good() const;

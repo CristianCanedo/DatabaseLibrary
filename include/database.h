@@ -36,6 +36,7 @@ public:
 
     // MANIPULATORS
     Database& connect();
+    Database& connect(std::string connectionString);
     Database& select(std::string sql);
     Database& insert(std::string sql);
     Database& update(std::string sql);

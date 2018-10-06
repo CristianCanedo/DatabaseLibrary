@@ -25,6 +25,16 @@ std::unique_ptr<DataResult> DataResult::fail(std::string errmsg)
     return std::unique_ptr<DataResult>(new DataResult(errmsg));
 }
 
+std::string DataResult::getError() const
+{
+    return d_errmsg;
+}
+
+int DataResult::size() const
+{
+    return d_dataSet.size();
+}
+
 Row& DataResult::operator[](int index)
 {
     return d_dataSet[index];
