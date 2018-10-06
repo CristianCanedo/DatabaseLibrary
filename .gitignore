@@ -34,11 +34,3 @@
 # Vim
 *.swp
 *.un~
-
-# VSCode
-*.vscode
-
-linux
-windows
-archive.txt
-installer.cpp
