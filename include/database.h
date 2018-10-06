@@ -14,7 +14,7 @@ typedef int (*callback_t)(void*, int, char**, char**);
 
 private:
     sqlite3* d_database_p;
-std::unique_ptr<DataResult> d_result_p;
+    std::unique_ptr<DataResult> d_result_p;
     DataSet d_dataSet;
     std::string d_lastError;
 
@@ -42,7 +42,7 @@ public:
     void close();
 
     // ACCESSORS
-std::string getLastError() const;
+    std::string getLastError() const;
     DataResult getResult() const;
 };
 #endif
