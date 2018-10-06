@@ -34,3 +34,6 @@
 # Vim
 *.swp
 *.un~
+
+# Catch
+*.stackdump

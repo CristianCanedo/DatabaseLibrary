@@ -30,9 +30,6 @@ Database::Database(std::string dbPath)
 
 Database::~Database()
 {
-	if (d_database_p != nullptr) {
-        close();
-	}
 }
 
 Database& Database::connect()
