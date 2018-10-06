@@ -60,7 +60,9 @@ $(tobjdir)//%.o: $(testdir)//%.cpp
 clean:
 	@echo "Cleaning library object files"
 	rm -rf $(objdir)//*.o
+	@echo ""
 
 tclean:
 	@echo "Cleaning test object files"
 	rm -rf $(tobjdir)//*.o
+	@echo ""
