@@ -17,15 +17,15 @@ Database::Database()
 	callback = NULL;
 
     if (!s_seeded) {
-		srand(time(NULL));
-		s_seeded = true;
+        srand(time(NULL));
+        s_seeded = true;
     }
 }
 
 Database::Database(std::string dbPath)
 {
     if (s_dbPath.empty()) {
-		s_dbPath = dbPath;
+        s_dbPath = dbPath;
     }
     Database();
 }
