@@ -9,11 +9,12 @@
 #include "../include/dataset.h"
 
 bool Database::s_seeded = false;
-std::string Database::s_dbPath = "/var/lib/sqlite3/storage/storage.db";
+std::string Database::s_dbPath = "";
 
 Database::Database()
 {
     d_result_p = nullptr;
+	callback = NULL;
 
     if (!s_seeded) {
 		srand(time(NULL));
@@ -31,59 +32,54 @@ Database::Database(std::string dbPath)
 
 Database::~Database()
 {
-    d_result_p->release();
-	delete d_result_p;
+	if (d_database_p != nullptr) {
+		close();
+	}
 }
 
 Database& Database::connect()
 {
     if (sqlite3_open(s_dbPath.c_str(), &d_database_p) != SQLITE_OK) {
-		sqlite3_close(d_database_p);
-		throw std::runtime_error(sqlite3_errmsg(d_database_p));
+		std::string errmsg(sqlite3_errmsg(d_database_p));
+		throw std::runtime_error("Database::connect(): " + errmsg);
     }
+
     return *this;
 }
 
 Database& Database::select(std::string sql)
 {
     callback = selectCallback;
-    char* errmsg;
-    int rc = executeSQL(sql, &errmsg);
+	executeSQL(sql);
 
-    if (rc != SQLITE_OK) {
-		throw std::runtime_error(errmsg);
-    }
+	d_result_p = DataResult::ok(d_dataSet);
 
-	callback = nullptr;
-    delete errmsg;
     return *this;
 }
 
 Database& Database::insert(std::string sql)
 {
-    callback = nullptr;
-    char* errmsg;
-    int rc = executeSQL(sql, &errmsg);
-    
-    if (rc != SQLITE_OK) {
-		throw std::runtime_error(errmsg);
-    }
-
-    delete errmsg;
+	executeSQL(sql);
     return *this;
 }
 
 Database& Database::update(std::string sql)
 {
-	callback = nullptr;
+	executeSQL(sql);
     return *this;
 }
 
 void Database::close()
 {
     if (sqlite3_close(d_database_p) != SQLITE_OK) {
-		throw std::runtime_error(sqlite3_errmsg(d_database_p));
+		std::string errmsg(sqlite3_errmsg(d_database_p));
+		throw std::runtime_error("Database::close(): " + errmsg);
     }
+}
+
+std::string Database::getLastError() const
+{
+	return d_lastError;
 }
 
 DataResult Database::getResult() const
@@ -91,9 +87,23 @@ DataResult Database::getResult() const
     return *d_result_p;
 }
 
-int Database::executeSQL(std::string sql, char** errorMsg)
+int Database::executeSQL(std::string sql)
 {
-    return sqlite3_exec(d_database_p, sql.c_str(), callback, &d_dataSet, errorMsg);
+    char* errmsg;
+    int ret;
+    
+    ret = sqlite3_exec(d_database_p, sql.c_str(), callback, &d_dataSet, &errmsg);
+
+    if (ret != SQLITE_OK) {
+		std::string errMsg(errmsg);
+		sqlite3_free(errmsg);
+		delete errmsg;
+		throw std::runtime_error("Database::executeSQL(): " + errMsg);
+    }
+
+	callback = NULL;
+	delete errmsg;
+	return ret;
 }
 
 int Database::generateUniqueId()
