@@ -1,9 +1,7 @@
 
-repo = database
-
-if [ ! -d ../$repo ]; then
+if [ ! -d ../database ]; then
     git clone git@gitlab.com:hackerexecute/database.git
-    cd $repo
+    cd database/
     make all
 else
     make all
