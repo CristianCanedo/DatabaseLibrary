@@ -7,16 +7,18 @@ mkdir tests/build
 # Compile and link library
 make all
 make clean
-make tclean
 
 # Install use of library in cygwin environment
 usrlib = /usr/lib/
 usrinc = /usr/include/
 
-echo "Copying lib/libdatabase.a to C++ lib path\n"
+echo ""
+echo "Copying lib/libdatabase.a to C++ lib path"
 cp -f lib/libdatabase.a $usrlib
 
-echo "Copying header files to C++ include path\n"
+echo ""
+echo "Copying header files to C++ include path"
 cp -f include/*.h $usrinc
 
-echo "\nInstall completed"
+echo ""
+echo "Install success."
