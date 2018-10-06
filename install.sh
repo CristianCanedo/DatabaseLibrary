@@ -1,8 +1,17 @@
 
 # Create needed directories
-mkdir build
-mkdir lib
-mkdir tests/build
+if [ ! -d build ]; then
+    mkdir build
+fi
+
+if [ ! -d lib ]; then
+    mkdir lib
+fi
+
+if [ ! -d tests/build ]; then
+    mkdir tests/build
+fi
+echo ""
 
 # Compile and link library
 make all
@@ -14,15 +23,16 @@ usrinc=/usr/include/
 
 echo ""
 echo "Copying library to C++ lib path"
-cp -f lib/libdatabase.a $usrlib
 
-if [ ! -f lib/libdatabase.a ]; then
-    echo "\nInstallation failed.\n"
-    exit 1
+if [ -d $usrlib ]; then
+    cp -f lib/libdatabase.a $usrlib
+else
+    echo "Unable to copy lib/libdatabase.a to C++ library path."
 fi
 
-echo "Copying header files to C++ include path"
-cp -f include/*.h $usrinc
 echo ""
+echo "Copying header files to C++ include path"
 
-echo "Installation success."
+if [ -d $usrinc ]; then
+    cp -f include/*.h $usrinc
+fi
