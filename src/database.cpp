@@ -3,10 +3,10 @@
 #include <time.h>
 #include <stdexcept>
 #include <vector>
-#include "../include/sqlite3.h"
-#include "../include/database.h"
-#include "../include/dataresult.h"
-#include "../include/dataset.h"
+#include "sqlite3.h"
+#include "database.h"
+#include "dataresult.h"
+#include "dataset.h"
 
 bool Database::s_seeded = false;
 std::string Database::s_dbPath = "";
