@@ -57,11 +57,3 @@ clean:
 tclean:
 	@echo "Cleaning test object files\n"
 	rm -rf $(tobjdir)//*.o
-
-updateLibrary:
-	@echo "Moving libdatabase.a to C++ lib path\n"
-	cp -f lib/libdatabase.a /usr/lib/
-
-updateHeaders:
-	@echo "Moving header files to C++ include path\n"
-	cp -f include/*.h /usr/include/
