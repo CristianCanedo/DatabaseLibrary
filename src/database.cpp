@@ -14,7 +14,7 @@ std::string Database::s_dbPath = "";
 Database::Database()
 {
     d_result_p = nullptr;
-	callback = NULL;
+	d_callback = NULL;
 
     if (!s_seeded) {
         srand(time(NULL));
@@ -56,7 +56,7 @@ Database& Database::connect(std::string connectionString)
 
 Database& Database::select(std::string sql)
 {
-    callback = selectCallback;
+    d_callback = selectCallback;
     executeSQL(sql);
 
     d_result_p = DataResult::ok(d_dataSet);
@@ -74,6 +74,11 @@ Database& Database::update(std::string sql)
 {
     executeSQL(sql);
     return *this;
+}
+
+Database& Database::setcallback(callback_t callback)
+{
+    d_callback = callback;
 }
 
 void Database::close()
@@ -99,7 +104,7 @@ int Database::executeSQL(std::string sql)
     char* errmsg;
     int ret;
     
-    ret = sqlite3_exec(d_database_p, sql.c_str(), callback, &d_dataSet, &errmsg);
+    ret = sqlite3_exec(d_database_p, sql.c_str(), d_callback, &d_dataSet, &errmsg);
 
     if (ret != SQLITE_OK) {
         std::string errMsg(errmsg);
@@ -108,7 +113,7 @@ int Database::executeSQL(std::string sql)
         throw std::runtime_error("Database::executeSQL(): " + errMsg);
     }
 
-    callback = NULL;
+    d_callback = NULL;
     delete errmsg;
 	return ret;
 }

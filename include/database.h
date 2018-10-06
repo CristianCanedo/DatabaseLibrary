@@ -16,17 +16,15 @@ private:
     sqlite3* d_database_p;
     std::unique_ptr<DataResult> d_result_p;
     DataSet d_dataSet;
+    callback_t d_callback;
     std::string d_lastError;
 
     static std::string s_dbPath;
     static bool s_seeded;
 
-    callback_t callback;
-
     int executeSQL(std::string sql);
     int generateUniqueId();
     static int selectCallback(void*, int argc, char** argv, char** colName);
-	//static int updateCallback(void*, int argc, char** argv, char** colName);
 
 public:
     // CREATORS
@@ -40,6 +38,7 @@ public:
     Database& select(std::string sql);
     Database& insert(std::string sql);
     Database& update(std::string sql);
+    Database& setcallback(callback_t);
     void close();
 
     // ACCESSORS
