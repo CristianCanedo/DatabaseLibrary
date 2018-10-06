@@ -8,25 +8,28 @@ SelectQuery::SelectQuery() {}
 SelectQuery& SelectQuery::select()
 {
     d_internal = "SELECT * ";
+    return *this;
 }
 
 SelectQuery& SelectQuery::select(const std::vector<std::string>& columns)
 {
     d_internal = "SELECT ";
 
-    auto join = [d_internal](const std::string& col) { d_internal.append(col + ", "); };
+    auto join = [this](const std::string& col) { this->d_internal.append(col + ", "); };
 
     std::for_each(columns.begin(), columns.end(), join);
 
     // removes last comma and whitespace
-    d_internal.erase(d_internal - 2);
+    d_internal.erase(d_internal.length() - 2);
     // return whitespace at end
-    d_internal.push_back(" ");
+    d_internal.push_back(' ');
+    return *this;
 }
 
 SelectQuery& SelectQuery::from(std::string table)
 {
     d_internal.append(table + " ");
+    return *this;
 }
 
 SelectQuery& SelectQuery::where(std::string column, Condition con, std::string value)
@@ -34,6 +37,7 @@ SelectQuery& SelectQuery::where(std::string column, Condition con, std::string v
     d_internal.append("WHERE " + column + " ");
     d_internal.append(getStringCondition(con) + " ");
     d_internal.append(value);
+    return *this;
 }
 
 std::string SelectQuery::getStringCondition(Condition con)
@@ -54,7 +58,7 @@ std::string SelectQuery::getStringCondition(Condition con)
     }
 }
 
-SelectQuery& SelectQuery::toString() const
+std::string SelectQuery::toString() const
 {
     return (d_internal + ";");
 }
