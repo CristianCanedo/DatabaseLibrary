@@ -38,7 +38,7 @@ public:
     Database& select(std::string sql);
     Database& insert(std::string sql);
     Database& update(std::string sql);
-    Database& setcallback(callback_t);
+    void setcallback(callback_t);
     void close();
 
     // ACCESSORS
