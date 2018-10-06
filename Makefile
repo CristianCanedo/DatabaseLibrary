@@ -30,15 +30,15 @@ $(objdir)//%.o: $(srcdir)//%.cpp
 
 # Run Tests
 
-tbuilddir := $(testdir)\build
+tobjdir := $(testdir)//build
 TESTSRCS := $(wildcard $(testdir)//*.cpp)
-TESTOBJS := $(patsubst $(testdir)//%.cpp, $(tbuilddir)//%.o, $(TESTSRCS))
-TESTEXE := $(testdir)//runtests
+TESTOBJS := $(patsubst $(testdir)//%.cpp, $(tobjdir)//%.o, $(TESTSRCS))
+TESTEXE := $(testdir)//alltests
 
 tests: $(TESTOBJS)
 	$(CC) $^ -l database -o $(TESTEXE)
 
-$(tbuilddir)//%.o: $(testdir)//%.cpp
+$(tobjdir)//%.o: $(testdir)//%.cpp
 	$(CC) -I ..//$(incdir) $(CPPFLAGS) -o $@ $<
 
 .PHONY: clean

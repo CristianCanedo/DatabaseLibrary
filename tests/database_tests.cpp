@@ -3,7 +3,7 @@
 #include "database.h"
 
 class DatabaseTestFixture {
-private:
+protected:
     Database db;
 
 public:
