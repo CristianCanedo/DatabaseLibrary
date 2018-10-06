@@ -19,7 +19,7 @@ OBJS := $(patsubst $(srcdir)//%.cpp, $(objdir)//%.o, $(SRCS))
 
 
 # TARGETS
-all: clean tclean sqlite lib updateLibrary updateHeaders
+all: sqlite lib
 
 sqlite: $(srcdir)//sqlite3.c
 	@echo "Compiling sqlite3 object file\n"
