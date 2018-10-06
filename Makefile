@@ -45,7 +45,10 @@ $(tobjdir)//%.o: $(testdir)//%.cpp
 clean:
 	@echo Cleaning object files...
 	rm -rf $(objdir)//*.o
-	@echo \nDone.
+
+tclean:
+	@echo Cleaning test object files...
+	rm -rf $(tobjdir)//*.o
 
 updateLibrary:
 	@echo Moving libdatabase.a to c++ search path...
