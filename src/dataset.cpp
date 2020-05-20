@@ -14,6 +14,8 @@ std::string Column::getValue() const
     return d_value;
 }
 
+// New method here
+
 Row::Row() {}
 
 void Row::addColumn(std::string name, std::string value)
